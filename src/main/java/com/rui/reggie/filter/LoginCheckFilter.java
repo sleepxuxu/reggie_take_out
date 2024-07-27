@@ -1,6 +1,7 @@
 package com.rui.reggie.filter;
 
 import com.alibaba.fastjson2.JSON;
+import com.rui.reggie.common.BaseContext;
 import com.rui.reggie.common.Result;
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,6 +45,11 @@ public class LoginCheckFilter implements Filter {
 
         // 判断登录状态
        if(request.getSession().getAttribute("employee") != null) {
+
+           // 设置线程Id
+           Long empId = (Long) request.getSession().getAttribute("employee");
+           BaseContext.setThreadLocalId(empId);
+
            filterChain.doFilter(request, response);
            return;
        }
