@@ -54,8 +54,15 @@ public class CategoryController {
     @PostMapping("/delete")
     public Result<String> delete(Long id) {
         log.info("删除分类id:{}",id);
-        categoryService.removeById(id);
 
+        categoryService.removeByCategoryId(id);
         return Result.success("删除成功");
+    }
+
+    @PostMapping("/update")
+    public Result<String> update(@RequestBody Category category) {
+        log.info("修改分类信息:{}",category);
+        categoryService.updateById(category);
+        return Result.success("修改成功");
     }
 }
