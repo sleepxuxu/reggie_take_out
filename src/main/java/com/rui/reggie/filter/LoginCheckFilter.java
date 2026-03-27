@@ -30,7 +30,8 @@ public class LoginCheckFilter implements Filter {
         // 白名单不做拦截
         String[] whiteUrls = new String[] {
                 "/employee/login",
-                "/employee/logout"
+                "/employee/logout",
+                "/common/**"
         };
 
         // 判断本次请求是否需要处理
@@ -64,10 +65,19 @@ public class LoginCheckFilter implements Filter {
      * @return
      */
     public boolean check(String[] whiteUrls, String requestUrl) {
-        for(String url: whiteUrls) {
-            boolean match = requestUrl.equals(url);
-            if(match) return true;
+        for (String urlPattern : whiteUrls) {
+            // 处理通配符模式
+            if (urlPattern.endsWith("/**")) {
+                String prefix = urlPattern.substring(0, urlPattern.length() - 2);
+                if (requestUrl.startsWith(prefix)) {
+                    return true;
+                }
+            }
+            // 精确匹配
+            else if (requestUrl.equals(urlPattern)) {
+                return true;
+            }
         }
         return false;
-    };
+    }
 }
