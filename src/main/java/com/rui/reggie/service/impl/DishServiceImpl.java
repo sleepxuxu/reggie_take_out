@@ -26,7 +26,6 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
     @Transactional
     public void saveWithDishFlavor(DishDto dishDto) {
         this.save(dishDto);
-
         Long dishId = dishDto.getId();
 
         List<DishFlavor> dishFlavors = dishDto.getDishFlavors();
