@@ -1,5 +1,6 @@
 package com.rui.reggie.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.rui.reggie.dto.DishDto;
@@ -9,6 +10,7 @@ import com.rui.reggie.mapper.DishMapper;
 import com.rui.reggie.service.DishFlavorService;
 import com.rui.reggie.service.DishService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,5 +36,25 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
             dishFlavors.forEach(item -> item.setDishId(dishId));
             dishFlavorService.saveBatch(dishFlavors);
         }
+    }
+
+    @Override
+    public DishDto getDishDtoById(Long dishId) {
+
+        Dish dish = getById(dishId);
+
+        DishDto dishDto = new DishDto();
+
+        BeanUtils.copyProperties(dish, dishDto);
+
+        LambdaQueryWrapper<DishFlavor> queryWrapper = new LambdaQueryWrapper<>();
+
+        queryWrapper.eq(DishFlavor::getDishId, dish.getId());
+
+        List<DishFlavor> dishFlavors = dishFlavorService.list(queryWrapper);
+
+        dishDto.setDishFlavors(dishFlavors);
+
+        return dishDto;
     }
 }

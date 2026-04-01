@@ -39,7 +39,7 @@ public class DishController {
     public Result<String> addDish(@RequestBody DishDto dishDto) {
         log.info(dishDto.toString());
         dishService.saveWithDishFlavor(dishDto);
-        return  Result.success("操作成功");
+        return Result.success("操作成功");
     }
 
     /**
@@ -52,22 +52,22 @@ public class DishController {
 
         Page<DishDto> pageDishDto = new Page<>(page, pageSize);
 
-        LambdaQueryWrapper<Dish> queryWrapper =  new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<Dish> queryWrapper = new LambdaQueryWrapper<>();
 
         queryWrapper.like(name != null, Dish::getName, name);
 
         queryWrapper.orderByDesc(Dish::getUpdateTime);
 
-        dishService.page(pageDish,queryWrapper);
+        dishService.page(pageDish, queryWrapper);
 
-        BeanUtils.copyProperties(pageDish,pageDishDto, "records");
+        BeanUtils.copyProperties(pageDish, pageDishDto, "records");
 
         List<Dish> records = pageDish.getRecords();
 
         List<DishDto> list = records.stream().map(item -> {
             DishDto dishDto = new DishDto();
 
-            BeanUtils.copyProperties(item,dishDto);
+            BeanUtils.copyProperties(item, dishDto);
 
             Long categoryId = dishDto.getCategoryId();
 
@@ -80,6 +80,18 @@ public class DishController {
 
         pageDishDto.setRecords(list);
 
-        return  Result.success(pageDishDto);
+        return Result.success(pageDishDto);
+    }
+
+
+    /**
+     * 菜品详情
+     */
+
+    @GetMapping("/{id}")
+    public Result<DishDto> getById(@PathVariable Long id) {
+
+        DishDto dishDto = dishService.getDishDtoById(id);
+        return Result.success(dishDto);
     }
 }
