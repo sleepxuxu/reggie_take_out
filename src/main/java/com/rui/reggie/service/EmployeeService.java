@@ -4,4 +4,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.rui.reggie.entity.Employee;
 
 public interface EmployeeService extends IService<Employee> {
+   public Employee getEmployeeByName(String name);
 }

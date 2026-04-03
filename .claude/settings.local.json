@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mvn compile:*)",
+      "Bash(java -version)",
+      "Bash(mvn -version)",
+      "Bash(curl -s \"https://search.maven.org/solrsearch/select?q=g:org.projectlombok+a:lombok&rows=5&wt=json&core=gav\")",
+      "Bash(python3 -c \"import sys,json; data=json.load\\(sys.stdin\\); [print\\(d['v']\\) for d in data['response']['docs']]\")",
+      "Bash(mvn dependency:resolve -Dartifact=org.projectlombok:lombok:RELEASE)",
+      "Bash(curl -s \"http://maven.aliyun.com/nexus/content/repositories/central/org/projectlombok/lombok/maven-metadata.xml\")"
+    ]
+  }
+}

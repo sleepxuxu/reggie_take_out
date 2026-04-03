@@ -13,4 +13,8 @@ public class BaseContext {
     public static Long getThreadLocalId() {
         return threadLocal.get();
     }
+
+    public static void remove() {
+        threadLocal.remove();
+    }
 }

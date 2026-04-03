@@ -46,7 +46,7 @@ public class DishController {
      * 菜品分页查询
      */
     @GetMapping("/page")
-    public Result<Page> getDish(Integer page, Integer pageSize, String name) {
+    public Result<Page<DishDto>> getDish(Integer page, Integer pageSize, String name) {
 
         Page<Dish> pageDish = new Page<>(page, pageSize);
 

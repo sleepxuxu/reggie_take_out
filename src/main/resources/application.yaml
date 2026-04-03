@@ -18,4 +18,10 @@ mybatis-plus:
       id-type: assign_id
 reggie:
   path: D:\
+  default-password: "123456"  # 初始密码，建议通过环境变量覆盖
+  upload:
+    allowed-extensions: .jpg,.jpeg,.png,.gif,.pdf,.doc,.docx  # 允许上传的文件扩展名
+    max-size: 10485760  # 最大文件大小10MB
+  security:
+    white-list: /employee/login,/employee/logout,/common/**  # 登录白名单
 

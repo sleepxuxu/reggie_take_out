@@ -38,7 +38,7 @@ public class CategoryController {
      * @return
      */
     @GetMapping("/page")
-    public Result<Page> page(Integer pageNum, Integer pageSize) {
+    public Result<Page<Category>> page(Integer pageNum, Integer pageSize) {
         Page<Category> pageInfo = new Page<>(pageNum, pageSize);
 
         // 条件构造器

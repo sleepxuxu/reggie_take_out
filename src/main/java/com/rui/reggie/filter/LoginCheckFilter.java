@@ -15,9 +15,21 @@ import java.io.IOException;
  * 检查用户是否已经完成登录
  */
 
-@WebFilter(filterName = "loginCheckFilter", urlPatterns = "/*")
 @Slf4j
+@WebFilter(urlPatterns = "/*")
 public class LoginCheckFilter implements Filter {
+
+    private String[] whiteUrls = new String[] {"/employee/login", "/employee/logout", "/common/**"};
+
+    public LoginCheckFilter() {}
+
+    public LoginCheckFilter(String[] whiteUrls) {
+        this.whiteUrls = whiteUrls;
+    }
+
+    public void setWhiteUrls(String[] whiteUrls) {
+        this.whiteUrls = whiteUrls;
+    }
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
@@ -27,12 +39,10 @@ public class LoginCheckFilter implements Filter {
         String requestUrl = request.getRequestURI();
 
         log.info("当前请求{}",requestUrl);
-        // 白名单不做拦截
-        String[] whiteUrls = new String[] {
-                "/employee/login",
-                "/employee/logout",
-                "/common/**"
-        };
+        // 使用配置的白名单
+        if (whiteUrls == null) {
+            whiteUrls = new String[] {"/employee/login", "/employee/logout", "/common/**"};
+        }
 
         // 判断本次请求是否需要处理
         boolean check = check(whiteUrls, requestUrl);
@@ -46,12 +56,14 @@ public class LoginCheckFilter implements Filter {
 
         // 判断登录状态
        if(request.getSession().getAttribute("employee") != null) {
-
            // 设置线程Id
            Long empId = (Long) request.getSession().getAttribute("employee");
            BaseContext.setThreadLocalId(empId);
-
-           filterChain.doFilter(request, response);
+           try {
+               filterChain.doFilter(request, response);
+           } finally {
+               BaseContext.remove(); // 清理ThreadLocal，防止内存泄漏
+           }
            return;
        }
 

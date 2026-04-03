@@ -16,19 +16,29 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
      */
     @Override
     public void insertFill(MetaObject metaObject) {
-        log.info("公共字段--insert");
-        log.info(metaObject.toString());
+        log.debug("公共字段--insert");
+        log.debug(metaObject.toString());
         metaObject.setValue("createTime", LocalDateTime.now());
         metaObject.setValue("updateTime", LocalDateTime.now());
-        metaObject.setValue("createUser", BaseContext.getThreadLocalId());
-        metaObject.setValue("updateUser", BaseContext.getThreadLocalId());
+        Long currentId = BaseContext.getThreadLocalId();
+        if (currentId == null) {
+            log.error("当前线程未设置用户ID，无法自动填充创建用户和更新用户");
+            throw new CustomException("用户未登录，无法执行此操作");
+        }
+        metaObject.setValue("createUser", currentId);
+        metaObject.setValue("updateUser", currentId);
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        log.info("公共字段--update");
-        log.info(metaObject.toString());
+        log.debug("公共字段--update");
+        log.debug(metaObject.toString());
         metaObject.setValue("updateTime", LocalDateTime.now());
-        metaObject.setValue("updateUser", BaseContext.getThreadLocalId());
+        Long currentId = BaseContext.getThreadLocalId();
+        if (currentId == null) {
+            log.error("当前线程未设置用户ID，无法自动填充更新用户");
+            throw new CustomException("用户未登录，无法执行此操作");
+        }
+        metaObject.setValue("updateUser", currentId);
     }
 }
