@@ -83,7 +83,6 @@ public class DishController {
         return Result.success(pageDishDto);
     }
 
-
     /**
      * 菜品详情
      */
@@ -94,4 +93,15 @@ public class DishController {
         DishDto dishDto = dishService.getDishDtoById(id);
         return Result.success(dishDto);
     }
+
+    /**
+     * 修改菜品
+     */
+    @PutMapping("/update")
+    public Result<String> updateDish(@RequestBody DishDto dishDto) {
+        log.info(dishDto.toString());
+        dishService.updateDish(dishDto);
+        return Result.success("操作成功");
+    }
+
 }

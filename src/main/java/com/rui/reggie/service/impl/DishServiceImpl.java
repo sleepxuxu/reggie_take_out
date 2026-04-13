@@ -34,7 +34,7 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
 
         if (CollectionUtils.isNotEmpty(dishFlavors)) {
             dishFlavors.forEach(item -> item.setDishId(dishId));
-            dishFlavorService.saveBatch(dishFlavors);
+            baseMapper.insertDishFlavors(dishFlavors);
         }
     }
 
@@ -57,4 +57,23 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
 
         return dishDto;
     }
+
+    @Override
+    @Transactional
+    public void updateDish(DishDto dishDto) {
+        // 更新菜品基本信息（使用 XML SQL）
+        baseMapper.updateDish(dishDto);
+
+        // 删除该菜品的旧口味信息
+        baseMapper.deleteDishFlavorByDishId(dishDto.getId());
+
+        // 保存新的口味信息
+        List<DishFlavor> dishFlavors = dishDto.getDishFlavors();
+        if (CollectionUtils.isNotEmpty(dishFlavors)) {
+            dishFlavors.forEach(item -> item.setDishId(dishDto.getId()));
+            baseMapper.insertDishFlavors(dishFlavors);
+        }
+    }
+
+
 }

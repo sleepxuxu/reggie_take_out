@@ -9,6 +9,11 @@ spring:
     url: jdbc:mysql://localhost:3306/reggie?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: root
+  redis:
+    host: localhost
+    port: 6379
+    password: zxcv123
+    database: 0
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true

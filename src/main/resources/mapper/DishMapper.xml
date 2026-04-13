@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rui.reggie.mapper.DishMapper">
+
+    <!-- 更新菜品基本信息 -->
+    <update id="updateDish" parameterType="com.rui.reggie.entity.Dish">
+        UPDATE dish
+        SET name = #{name},
+            category_id = #{categoryId},
+            price = #{price},
+            code = #{code},
+            image = #{image},
+            description = #{description},
+            status = #{status},
+            sort = #{sort},
+            update_time = #{updateTime},
+            update_user = #{updateUser}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除菜品的所有口味 -->
+    <delete id="deleteDishFlavorByDishId" parameterType="long">
+        DELETE FROM dish_flavor WHERE dish_id = #{dishId}
+    </delete>
+
+    <!-- 批量保存菜品口味 -->
+    <insert id="insertDishFlavors" parameterType="java.util.List">
+        INSERT INTO dish_flavor (id, dish_id, name, value, create_time, update_time, create_user, update_user, is_deleted)
+        VALUES
+        <foreach collection="list" item="flavor" separator=",">
+            (#{flavor.id}, #{flavor.dishId}, #{flavor.name}, #{flavor.value}, #{flavor.createTime}, #{flavor.updateTime}, #{flavor.createUser}, #{flavor.updateUser}, #{flavor.isDeleted})
+        </foreach>
+    </insert>
+
+</mapper>
+

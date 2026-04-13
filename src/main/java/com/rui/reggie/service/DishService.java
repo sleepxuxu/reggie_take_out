@@ -16,4 +16,10 @@ public interface DishService extends IService<Dish> {
      * 查询菜品详情
      */
     public DishDto getDishDtoById(Long dishId);
+
+
+    /**
+     * 修改菜品
+     */
+    public void updateDish(DishDto dishDto);
 }
