@@ -37,13 +37,33 @@ public class SetmealDishController {
     public Result<List<Setmeal>> page(Integer pageNum, Integer pageSize) {
         Page<Setmeal> page = new Page<>(pageNum, pageSize);
 
-        // todo
         LambdaQueryWrapper<Setmeal> queryWrapper = new LambdaQueryWrapper<>();
 
         setmealService.page(page, queryWrapper);
 
         List<Setmeal> setmealList = page.getRecords();
 
+        log.info("setmealList:{}", setmealList);
+
         return Result.success(setmealList);
+    }
+
+    /**
+     * 套餐详情
+     */
+    @GetMapping("/{id}")
+    public Result<SetmealDto> getById(@PathVariable Long id) {
+        SetmealDto setmealDto = setmealService.getSetmealDtoById(id);
+        return Result.success(setmealDto);
+    }
+
+    /**
+     * 修改套餐
+     */
+    @PostMapping("/update")
+    public Result<String> update(@RequestBody SetmealDto setmealDto) {
+        log.info("update setmealDto:{}", setmealDto);
+        setmealService.updateWithSetmealDto(setmealDto);
+        return Result.success("操作成功");
     }
 }

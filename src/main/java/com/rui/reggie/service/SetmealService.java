@@ -6,4 +6,8 @@ import com.rui.reggie.entity.Setmeal;
 
 public interface SetmealService extends IService<Setmeal> {
     public void saveWithSetmealDto(SetmealDto setmealDto);
+
+    public SetmealDto getSetmealDtoById(Long setmealId);
+
+    public void updateWithSetmealDto(SetmealDto setmealDto);
 }
